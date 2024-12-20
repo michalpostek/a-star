@@ -49,25 +49,17 @@ public class App {
             return 0;
         }
 
-        boolean isFromTheBottom = node.row == node.previous.row - 1;
+        int moveIndex = 0;
+        int[] nodeMove = { node.row - node.previous.row, node.col - node.previous.col };
 
-        if (isFromTheBottom) {
-            return 4;
+        for (int i = 0; i < MOVES.length; i++) {
+            if (Arrays.equals(MOVES[i], nodeMove)) {
+                moveIndex = i;
+                break;
+            }
         }
 
-        boolean isFromTheTop = node.row == node.previous.row + 1;
-
-        if (isFromTheTop) {
-            return 3;
-        }
-
-        boolean isFromTheRight = node.col == node.previous.col - 1;
-
-        if (isFromTheRight) {
-            return 2;
-        }
-
-        return 1;
+        return moveIndex;
     }
 
     private static Optional<List<Node>> findPath(int[][] map) {
@@ -75,7 +67,7 @@ public class App {
             int result = Double.compare(n1.f, n2.f);
 
             if (result == 0) {
-                return getNodeMovePriority(n2) - getNodeMovePriority(n1);
+                return getNodeMovePriority(n1) - getNodeMovePriority(n2);
             }
 
             return result;
