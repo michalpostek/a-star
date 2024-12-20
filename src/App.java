@@ -44,8 +44,42 @@ public class App {
         return targetNode;
     }
 
+    private static int getNodeMovePriority(Node node) {
+        if (node.previous == null) {
+            return 0;
+        }
+
+        boolean isFromTheBottom = node.row == node.previous.row - 1;
+
+        if (isFromTheBottom) {
+            return 4;
+        }
+
+        boolean isFromTheTop = node.row == node.previous.row + 1;
+
+        if (isFromTheTop) {
+            return 3;
+        }
+
+        boolean isFromTheRight = node.col == node.previous.col - 1;
+
+        if (isFromTheRight) {
+            return 2;
+        }
+
+        return 1;
+    }
+
     private static Optional<List<Node>> findPath(int[][] map) {
-        PriorityQueue<Node> openList = new PriorityQueue<Node>(Comparator.comparingDouble(n -> n.f));
+        PriorityQueue<Node> openList = new PriorityQueue<Node>((n1, n2) -> {
+            int result = Double.compare(n1.f, n2.f);
+
+            if (result == 0) {
+                return getNodeMovePriority(n2) - getNodeMovePriority(n1);
+            }
+
+            return result;
+        });
         boolean[][] closedList = new boolean[MAP_SIZE][MAP_SIZE];
 
         Node startNode = new Node(START_ROW, START_COL, 0, getEuclideanDistance(START_ROW, START_COL), null);
