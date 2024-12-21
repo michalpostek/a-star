@@ -1,6 +1,5 @@
 import java.io.File;
 import java.util.*;
-import node.Node;
 
 public class App {
     static final int MAP_SIZE = 20;
