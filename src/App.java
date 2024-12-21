@@ -59,30 +59,12 @@ public class App {
         return targetNode;
     }
 
-    private static int getNodeMovePriority(Node node) {
-        if (node.previous == null) {
-            return 0;
-        }
-
-        int moveIndex = 0;
-        int[] nodeMove = { node.row - node.previous.row, node.col - node.previous.col };
-
-        for (int i = 0; i < MOVES.length; i++) {
-            if (Arrays.equals(MOVES[i], nodeMove)) {
-                moveIndex = i;
-                break;
-            }
-        }
-
-        return moveIndex;
-    }
-
     private static Optional<List<Node>> findPath(int[][] map) {
         PriorityQueue<Node> openList = new PriorityQueue<Node>((n1, n2) -> {
             int result = Double.compare(n1.f, n2.f);
 
             if (result == 0) {
-                return getNodeMovePriority(n1) - getNodeMovePriority(n2);
+                return -1;
             }
 
             return result;
