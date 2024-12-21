@@ -1,7 +1,9 @@
+package node;
+
 public class Node {
-    int row, col, g;
-    double h, f;
-    Node previous;
+    public final int row, col, g;
+    public final double h, f;
+    public Node previous;
 
     public Node(int row, int col, int g, double h, Node previous) {
         this.row = row;
