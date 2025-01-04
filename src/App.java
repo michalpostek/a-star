@@ -63,15 +63,10 @@ public class App {
     private static Optional<List<Node>> findPath(int[][] map) {
         int counter = 0;
 
-        PriorityQueue<Node> openList = new PriorityQueue<Node>((n1, n2) -> {
-            int result = Double.compare(n1.f, n2.f);
-
-            if (result == 0) {
-                return Integer.compare(n2.order, n1.order);
-            }
-
-            return result;
-        });
+        PriorityQueue<Node> openList = new PriorityQueue<Node>(Comparator
+            .comparingDouble((Node node) -> node.f)
+            .thenComparingInt((Node node) -> -node.order)
+        );
         boolean[][] closedList = new boolean[MAP_SIZE][MAP_SIZE];
 
         Node startNode = new Node(START_ROW, START_COL, 0, getEuclideanDistance(START_ROW, START_COL), null, counter++);
