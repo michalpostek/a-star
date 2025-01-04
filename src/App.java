@@ -2,17 +2,18 @@ import java.io.File;
 import java.util.*;
 
 class Node {
-    int row, col, g;
+    int row, col, g, order;
     double h, f;
     Node previous;
 
-    public Node(int row, int col, int g, double h, Node previous) {
+    public Node(int row, int col, int g, double h, Node previous, int order) {
         this.row = row;
         this.col = col;
         this.g = g;
         this.h = h;
         this.f = g + h;
         this.previous = previous;
+        this.order = order;
     }
 }
 
@@ -60,18 +61,20 @@ public class App {
     }
 
     private static Optional<List<Node>> findPath(int[][] map) {
+        int counter = 0;
+
         PriorityQueue<Node> openList = new PriorityQueue<Node>((n1, n2) -> {
             int result = Double.compare(n1.f, n2.f);
 
             if (result == 0) {
-                return -1;
+                return Integer.compare(n2.order, n1.order);
             }
 
             return result;
         });
         boolean[][] closedList = new boolean[MAP_SIZE][MAP_SIZE];
 
-        Node startNode = new Node(START_ROW, START_COL, 0, getEuclideanDistance(START_ROW, START_COL), null);
+        Node startNode = new Node(START_ROW, START_COL, 0, getEuclideanDistance(START_ROW, START_COL), null, counter++);
         openList.add(startNode);
 
         while (!openList.isEmpty()) {
@@ -95,12 +98,13 @@ public class App {
 
                 int g = current.g + MOVE_COST;
                 double heuristic = getEuclideanDistance(newRow, newCol);
-                Node node = new Node(newRow, newCol, g, heuristic, current);
+                Node node = new Node(newRow, newCol, g, heuristic, current, counter++);
 
                 if (targetNode.isEmpty()) {
                     openList.add(node);
                 } else if (targetNode.get().f > node.f) {
-                    targetNode.get().previous = current;
+                    openList.remove(targetNode.get());
+                    openList.add(node);
                 }
             }
         }
